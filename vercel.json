@@ -8,6 +8,10 @@
   ],
   "routes": [
     {
+      "src": "/(.*\\.(png|jpg|jpeg|gif|svg|webp|css|js|ico))$",
+      "headers": { "cache-control": "s-maxage=31536000" }
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.js"
     }
