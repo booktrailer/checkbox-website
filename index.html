@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schoology Checkbox</title>
+    <link rel="icon" href="logo.png">
     <style>
         * {
             margin: 0;
@@ -503,6 +504,9 @@
                 } else if (currentPath === '/contact') {
                     const contactLink = document.querySelector('.nav-contact');
                     if (contactLink) contactLink.classList.add('active');
+                } else if (currentPath === '/add-school') {
+                    const addSchoolLink = document.querySelector('.nav-addschool');
+                    if (addSchoolLink) addSchoolLink.classList.add('active');
                 }
                 
                 // Initialize header behavior after loading

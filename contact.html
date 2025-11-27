@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact - Schoology Checkbox</title>
+    <link rel="icon" href="logo.png">
     <style>
         * {
             margin: 0;
@@ -91,7 +92,7 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #047857 0%, #0891b2 100%);
             color: white;
             padding: 120px 0;
             text-align: center;
@@ -322,7 +323,7 @@
                 <div class="contact-email" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">
                     <div class="email-address" style="color: white;">Want Schoology Checkbox at your school?</div>
                     <p style="color: rgba(255,255,255,0.9);">If your school isn't supported yet, let me know! I'm actively working to add more schools and would love to help students at your institution.</p>
-                    <button class="email-copy" onclick="copySchoolEmail()" style="background: white; color: #059669;">Request School Support</button>
+                    <a href="/add-school" class="email-copy" style="background: white; color: #059669; text-decoration: none; display: inline-block;">Request School Support</a>
                 </div>
             </div>
         </div>
@@ -388,6 +389,9 @@
                 } else if (currentPath === '/contact') {
                     const contactLink = document.querySelector('.nav-contact');
                     if (contactLink) contactLink.classList.add('active');
+                } else if (currentPath === '/add-school') {
+                    const addSchoolLink = document.querySelector('.nav-addschool');
+                    if (addSchoolLink) addSchoolLink.classList.add('active');
                 }
                 
                 // Initialize header behavior after loading
