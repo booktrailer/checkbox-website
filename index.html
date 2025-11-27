@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schoology Checkbox</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        header.visible {
+            transform: translateY(0);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 0.75rem;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+            background: rgba(37, 99, 235, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0;
+            text-align: center;
+        }
+
+        .hero-logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            border-radius: 16px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: #fff;
+            color: #2563eb;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2563eb;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature h3 {
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .chrome-store {
+            background: #f8fafc;
+            text-align: center;
+        }
+
+        .chrome-store h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #1e293b;
+        }
+
+        .chrome-store p {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .chrome-store-button {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #ea4335 100%);
+            color: white;
+            padding: 18px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+        }
+
+        .chrome-store-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(66, 133, 244, 0.4);
+        }
+
+        .chrome-store-icon {
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .external-link-icon {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .about {
+            background: #f1f5f9;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 0 auto;
+        }
+
+        footer {
+            background: #1e293b;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            width: 24px;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Initial Hidden States */
+        .hero-logo,
+        .hero h1,
+        .hero p,
+        .cta-button,
+        .section h2,
+        .feature,
+        .chrome-store-button,
+        .avatar,
+        .about-content > div:last-child {
+            opacity: 0;
+        }
+
+        /* Animation Classes */
+        body.loaded .hero-logo {
+            animation: scaleIn 0.8s ease-out 0.1s forwards;
+        }
+
+        body.loaded .hero h1 {
+            animation: fadeInUp 0.8s ease-out 0.3s forwards;
+        }
+
+        body.loaded .hero p {
+            animation: fadeInUp 0.8s ease-out 0.5s forwards;
+        }
+
+        body.loaded .cta-button {
+            animation: fadeInUp 0.8s ease-out 0.7s forwards;
+        }
+
+        body.loaded .section h2 {
+            animation: fadeInUp 0.8s ease-out 0.9s forwards;
+        }
+
+        body.loaded .feature:nth-child(1) {
+            animation: fadeInUp 0.8s ease-out 1.0s forwards;
+        }
+
+        body.loaded .feature:nth-child(2) {
+            animation: fadeInUp 0.8s ease-out 1.2s forwards;
+        }
+
+        body.loaded .feature:nth-child(3) {
+            animation: fadeInUp 0.8s ease-out 1.4s forwards;
+        }
+
+        body.loaded .chrome-store-button {
+            animation: scaleIn 0.8s ease-out 1.6s forwards;
+        }
+
+        body.loaded .avatar {
+            animation: scaleIn 0.8s ease-out 1.8s forwards;
+        }
+
+        body.loaded .about-content > div:last-child {
+            animation: slideInRight 0.8s ease-out 2.0s forwards;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-logo {
+                width: 90px;
+            }
+
+            .logo img {
+                height: 32px;
+            }
+
+            .footer-logo {
+                width: 20px;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <section class="hero">
+        <div class="container">
+            <img src="logo.png" alt="Schoology Checkbox Logo" class="hero-logo">
+            <h1>Organize Your Student Life</h1>
+            <p>The simple, elegant task management Chrome Extension that helps you get things done</p>
+            <a href="https://chromewebstore.google.com/detail/schoology-checkbox/apgbmonkbkidicdljbpamgaadghpnhkn" class="cta-button" target="_blank" rel="noopener noreferrer">Get Started Free</a>
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <div class="container">
+            <h2>Why Choose Schoology Checkbox?</h2>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">✅</div>
+                    <h3>Simple & Clean</h3>
+                    <p>Intuitive interface that focuses on what matters most - your tasks. No clutter, no distractions.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Lightning Fast</h3>
+                    <p>Add, edit, and complete tasks in seconds. Built for speed and efficiency.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🤯</div>
+                    <h3>Supercharges Intelligence</h3>
+                    <p>Multiplies your work efficiency by up to 4.7x to boost grades drastically.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section chrome-store">
+        <div class="container">
+            <h2>Ready to Get Started?</h2>
+            <p>Join thousands of students who have already improved their workflow with Schoology Checkbox. Visit the Chrome Web Store to install the extension in seconds and start organizing your assignments like a pro.</p>
+            <a href="https://chromewebstore.google.com/detail/schoology-checkbox/apgbmonkbkidicdljbpamgaadghpnhkn" class="chrome-store-button" target="_blank" rel="noopener noreferrer" aria-label="Visit Chrome Web Store to install Schoology Checkbox extension - opens in new tab">
+                <div class="chrome-store-icon">🌐</div>
+                Visit Chrome Web Store
+                <span class="external-link-icon">↗</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="section about" id="about">
+        <div class="container">
+            <h2>About the Creator</h2>
+            <div class="about-content">
+                <div class="avatar">R</div>
+                <div>
+                    <h3>Randy, Developer & Productivity Enthusiast</h3>
+                    <p>
+                        Randy is a student developer and productivity enthusiast who built Schoology Checkbox to solve a simple but annoying problem: keeping track of assignments across endless Schoology pages. After noticing how many classmates struggled with cluttered to-do lists and unfinished tasks buried inside modules, he designed a lightweight extension that adds instant checkboxes, cleaner organization, and a calmer workflow. A believer in frictionless design, Randy focuses on creating tools that quietly automate the boring parts of school so students can focus on the work that actually matters. Schoology Checkbox is the first of several small utilities he hopes to release to help students reclaim time, reduce stress, and make digital learning simpler.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <img src="logo.png" alt="Schoology Checkbox Logo" class="footer-logo">
+                <p>&copy; 2025 Schoology Checkbox.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load header
+        fetch('/header.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('header-placeholder').innerHTML = html;
+                
+                // Add active class to current page
+                const currentPath = window.location.pathname;
+                if (currentPath === '/') {
+                    const homeLink = document.querySelector('.nav-home');
+                    if (homeLink) homeLink.classList.add('active');
+                } else if (currentPath === '/contact') {
+                    const contactLink = document.querySelector('.nav-contact');
+                    if (contactLink) contactLink.classList.add('active');
+                }
+                
+                // Initialize header behavior after loading
+                initializeHeader();
+            });
+
+        function initializeHeader() {
+            // Header scroll behavior
+            let lastScrollY = window.scrollY;
+            const header = document.querySelector('header');
+
+            // Show header initially
+            header.classList.add('visible');
+
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+                
+                if (currentScrollY > 100) {
+                    if (currentScrollY > lastScrollY) {
+                        // Scrolling down
+                        header.classList.remove('visible');
+                    } else {
+                        // Scrolling up
+                        header.classList.add('visible');
+                    }
+                } else {
+                    // At the top - show header
+                    header.classList.add('visible');
+                }
+                
+                lastScrollY = currentScrollY;
+            });
+        }
+
+        // Page load animations
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>
