@@ -1,11 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
-const lockfile = require('proper-lockfile');
 const validator = require('validator');
 const createDOMPurify = require('dompurify');
 const { JSDOM } = require('jsdom');
-const fs = require('fs');
 const path = require('path');
 
 // Initialize DOMPurify for server-side use
@@ -112,87 +110,31 @@ app.post('/submit-school', submitLimiter, async (req, res) => {
       });
     }
     
-    // Atomic file operations with locking
-    const dataFile = path.join(__dirname, 'schools.json');
-    let release;
-    
-    try {
-      // Acquire lock on the file
-      release = await lockfile.lock(dataFile, {
-        retries: {
-          retries: 5,
-          factor: 2,
-          minTimeout: 100,
-          maxTimeout: 1000
-        }
-      });
+    // Create new school entry with sanitized inputs
+    const newSchool = {
+      id: Date.now().toString(),
+      schoolName: DOMPurify.sanitize(schoolName.trim()),
+      schoolUrl: validator.isURL(schoolUrl.trim()) ? schoolUrl.trim() : '',
+      submitterName: submitterName ? DOMPurify.sanitize(submitterName.trim()) : '',
+      notes: notes ? DOMPurify.sanitize(notes.trim()) : '',
+      submittedAt: new Date().toISOString(),
+      status: 'pending'
+    };
 
-      // Load existing schools data or create new
-      let schoolsData = { schools: [] };
-      
-      if (fs.existsSync(dataFile)) {
-        try {
-          const fileContent = fs.readFileSync(dataFile, 'utf8');
-          schoolsData = JSON.parse(fileContent);
-        } catch (e) {
-          console.error('Error reading schools.json:', e);
-          // If file is corrupted, start fresh but log the error
-        }
-      }
-      
-      // Check for duplicate URLs
-      const existingSchool = schoolsData.schools.find(
-        school => school.schoolUrl.toLowerCase() === schoolUrl.toLowerCase()
-      );
-      
-      if (existingSchool) {
-        await release();
-        return res.status(400).json({ 
-          success: false, 
-          message: 'This school URL has already been submitted.' 
-        });
-      }
-      
-      // Create new school entry with sanitized inputs
-      const newSchool = {
-        id: Date.now().toString(),
-        schoolName: DOMPurify.sanitize(schoolName.trim()),
-        schoolUrl: validator.isURL(schoolUrl.trim()) ? schoolUrl.trim() : '',
-        submitterName: submitterName ? DOMPurify.sanitize(submitterName.trim()) : '',
-        notes: notes ? DOMPurify.sanitize(notes.trim()) : '',
-        submittedAt: new Date().toISOString(),
-        status: 'pending'
-      };
-
-      // Validate sanitized URL again
-      if (!newSchool.schoolUrl) {
-        await release();
-        return res.status(400).json({ 
-          success: false, 
-          message: 'Please enter a valid URL.' 
-        });
-      }
-      
-      // Add to schools array
-      schoolsData.schools.push(newSchool);
-      
-      // Write to temporary file then move (atomic operation)
-      const tempFile = dataFile + '.tmp';
-      fs.writeFileSync(tempFile, JSON.stringify(schoolsData, null, 2));
-      fs.renameSync(tempFile, dataFile);
-      
-      // Release lock
-      await release();
-    } catch (lockError) {
-      if (release) {
-        await release();
-      }
-      console.error('File lock error:', lockError);
-      return res.status(500).json({ 
+    // Validate sanitized URL again
+    if (!newSchool.schoolUrl) {
+      return res.status(400).json({ 
         success: false, 
-        message: 'Server is busy, please try again in a moment.' 
+        message: 'Please enter a valid URL.' 
       });
     }
+    
+    // In production (Vercel), log the submission instead of saving to file
+    // For local development, you could add a database or external storage
+    console.log('School submission received:', JSON.stringify(newSchool, null, 2));
+    
+    // TODO: Replace with actual database storage (MongoDB, PostgreSQL, etc.)
+    // For now, just accept all submissions since we can't persist to file system on Vercel
     
     res.json({ 
       success: true, 
