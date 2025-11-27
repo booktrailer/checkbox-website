@@ -471,56 +471,16 @@
             document.body.classList.add('loaded');
         });
 
-        // Form submission
-        document.getElementById('schoolForm').addEventListener('submit', async (e) => {
+        // Static form - no submission functionality
+        document.getElementById('schoolForm').addEventListener('submit', (e) => {
             e.preventDefault();
             
-            const submitBtn = document.getElementById('submitBtn');
             const messageDiv = document.getElementById('message');
             
-            // Disable submit button
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
-            
-            // Get form data
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
-            
-            try {
-                const response = await fetch('/submit-school', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                const result = await response.json();
-                
-                if (response.ok) {
-                    // Success
-                    messageDiv.textContent = result.message || 'School submitted successfully! We\'ll review your submission and get back to you.';
-                    messageDiv.className = 'message success';
-                    messageDiv.style.display = 'block';
-                    
-                    // Reset form
-                    e.target.reset();
-                } else {
-                    // Error
-                    messageDiv.textContent = result.message || 'There was an error submitting your school. Please try again.';
-                    messageDiv.className = 'message error';
-                    messageDiv.style.display = 'block';
-                }
-            } catch (error) {
-                // Network error
-                messageDiv.textContent = 'There was a network error. Please check your connection and try again.';
-                messageDiv.className = 'message error';
-                messageDiv.style.display = 'block';
-            }
-            
-            // Re-enable submit button
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Submit School Request';
+            // Show static message
+            messageDiv.textContent = 'Form submission is currently disabled. Please contact us directly for school support requests.';
+            messageDiv.className = 'message error';
+            messageDiv.style.display = 'block';
             
             // Scroll to message
             messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
