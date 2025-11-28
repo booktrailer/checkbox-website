@@ -5,5 +5,11 @@
       "src": "index.js",
       "use": "@vercel/node"
     }
+  ],
+  "routes": [
+    {
+      "src": "/((?!.*\\.(png|jpg|jpeg|gif|svg|webp|css|js|ico)$).*)",
+      "dest": "/index.js"
+    }
   ]
 }
