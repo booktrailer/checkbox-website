@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 6767;
 
 // Serve static files (images, CSS, etc.)
 app.use(express.static(__dirname));
@@ -23,6 +23,10 @@ app.get('/add-school', (req, res) => {
 // Serve header component
 app.get('/header.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'header.html'));
+});
+
+app.get('/logo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'logo.png'));
 });
 
 
