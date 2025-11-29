@@ -25,7 +25,7 @@ app.get('/header.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'header.html'));
 });
 
-app.get('/logo', (req, res) => {
+app.get('/logo.png', (req, res) => {
   res.sendFile(path.join(__dirname, 'logo.png'));
 });
 
